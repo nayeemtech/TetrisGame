@@ -1,7 +1,3 @@
-package com.zetcode;
-
-import com.zetcode.Shape.Tetrominoe;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -90,37 +86,28 @@ public class Board extends JPanel {
     }
 
     private void doDrawing(Graphics g) {
-
         var size = getSize();
         int boardTop = (int) size.getHeight() - BOARD_HEIGHT * squareHeight();
-
+    
         for (int i = 0; i < BOARD_HEIGHT; i++) {
-
             for (int j = 0; j < BOARD_WIDTH; j++) {
-
                 Tetrominoe shape = shapeAt(j, BOARD_HEIGHT - i - 1);
-
                 if (shape != Tetrominoe.NoShape) {
-
-                    drawSquare(g, j * squareWidth(),
-                            boardTop + i * squareHeight(), shape);
+                    drawSquare(g, j * squareWidth(), boardTop + i * squareHeight(), shape);
                 }
             }
         }
-
+    
         if (curPiece.getShape() != Tetrominoe.NoShape) {
-
-            for (int i = 0; i < 4; i++) {
-
-                int x = curX + curPiece.x(i);
-                int y = curY - curPiece.y(i);
-
-                drawSquare(g, x * squareWidth(),
-                        boardTop + (BOARD_HEIGHT - y - 1) * squareHeight(),
-                        curPiece.getShape());
+            int yOffset = BOARD_HEIGHT - curY - 1; // Pre-calculate the offset once
+            for (Point coordinate : curPiece.getCoordinates()) {
+                int x = curX + coordinate.x;
+                int y = curY - coordinate.y;
+                drawSquare(g, x * squareWidth(), boardTop + yOffset * squareHeight(), curPiece.getShape());
             }
         }
-    }
+}
+
 
     private void dropDown() {
 
